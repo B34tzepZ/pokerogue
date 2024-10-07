@@ -1,26 +1,31 @@
-import { loggedInUser } from "#app/account";
+import {loggedInUser} from "#app/account";
 import BattleScene from "#app/battle-scene";
-import { BattleType } from "#app/battle";
-import { getDailyRunStarters, fetchDailyRunSeed } from "#app/data/daily-run";
-import { Gender } from "#app/data/gender";
-import { getBiomeKey } from "#app/field/arena";
-import { GameModes, GameMode, getGameMode } from "#app/game-mode";
-import { regenerateModifierPoolThresholds, ModifierPoolType, modifierTypes, getDailyRunStarterModifiers } from "#app/modifier/modifier-type";
-import { Phase } from "#app/phase";
-import { SessionSaveData } from "#app/system/game-data";
-import { Unlockables } from "#app/system/unlockables";
-import { vouchers } from "#app/system/voucher";
-import { OptionSelectItem, OptionSelectConfig } from "#app/ui/abstact-option-select-ui-handler";
-import { SaveSlotUiMode } from "#app/ui/save-slot-select-ui-handler";
-import { Mode } from "#app/ui/ui";
+import {BattleType} from "#app/battle";
+import {fetchDailyRunSeed, getDailyRunStarters} from "#app/data/daily-run";
+import {Gender} from "#app/data/gender";
+import {getBiomeKey} from "#app/field/arena";
+import {GameMode, GameModes, getGameMode} from "#app/game-mode";
+import {
+  getDailyRunStarterModifiers,
+  ModifierPoolType,
+  modifierTypes,
+  regenerateModifierPoolThresholds
+} from "#app/modifier/modifier-type";
+import {Phase} from "#app/phase";
+import {SessionSaveData} from "#app/system/game-data";
+import {Unlockables} from "#app/system/unlockables";
+import {vouchers} from "#app/system/voucher";
+import {OptionSelectConfig, OptionSelectItem} from "#app/ui/abstact-option-select-ui-handler";
+import {SaveSlotUiMode} from "#app/ui/save-slot-select-ui-handler";
+import {Mode} from "#app/ui/ui";
 import i18next from "i18next";
 import * as Utils from "#app/utils";
-import { Modifier } from "#app/modifier/modifier";
-import { CheckSwitchPhase } from "./check-switch-phase";
-import { EncounterPhase } from "./encounter-phase";
-import { SelectChallengePhase } from "./select-challenge-phase";
-import { SelectStarterPhase } from "./select-starter-phase";
-import { SummonPhase } from "./summon-phase";
+import {Modifier} from "#app/modifier/modifier";
+import {CheckSwitchPhase} from "./check-switch-phase";
+import {EncounterPhase} from "./encounter-phase";
+import {SelectChallengePhase} from "./select-challenge-phase";
+import {SelectStarterPhase} from "./select-starter-phase";
+import {SummonPhase} from "./summon-phase";
 
 
 export class TitlePhase extends Phase {
@@ -119,7 +124,7 @@ export class TitlePhase extends Phase {
               return true;
             }
           });
-          this.scene.ui.showText(i18next.t("menu:selectGameMode"), null, () => this.scene.ui.setOverlayMode(Mode.OPTION_SELECT, { options: options }));
+          this.scene.ui.showText(i18next.t("menu:selectGameMode"), null, () => this.scene.ui.setOverlayMode(Mode.OPTION_SELECT, {options: options}));
         } else {
           this.gameMode = GameModes.CLASSIC;
           this.scene.ui.setMode(Mode.MESSAGE);
@@ -149,6 +154,45 @@ export class TitlePhase extends Phase {
         return true;
       },
       keepOpen: true
+    },
+    {
+      label: i18next.t("menu:coop"),
+      handler: () => {
+        const setModeAndEnd = (gameMode: GameModes) => {
+          this.gameMode = gameMode;
+          this.scene.ui.setMode(Mode.MESSAGE);
+          this.scene.ui.clearText();
+          this.end();
+        };
+        const options: OptionSelectItem[] = [
+          {
+            label: GameMode.getModeName(GameModes.HOST_COOP),
+            handler: () => {
+              setModeAndEnd(GameModes.HOST_COOP);
+              return true;
+            }
+          },
+          {
+            label: GameMode.getModeName(GameModes.JOIN_COOP),
+            handler: () => {
+              setModeAndEnd(GameModes.JOIN_COOP);
+              return true;
+            }
+          },
+          {
+            label: i18next.t("menu:cancel"),
+            handler: () => {
+              this.scene.clearPhaseQueue();
+              this.scene.pushPhase(new TitlePhase(this.scene));
+              super.end();
+              return true;
+            }
+          }
+        ];
+        this.scene.ui.showText(i18next.t("menu:selectGameMode"), null, () => this.scene.ui.setOverlayMode(Mode.OPTION_SELECT, {options: options}));
+        return true;
+      },
+      //keepOpen: true
     },
     {
       label: i18next.t("menu:settings"),
