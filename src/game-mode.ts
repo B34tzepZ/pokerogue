@@ -16,8 +16,7 @@ export enum GameModes {
   SPLICED_ENDLESS,
   DAILY,
   CHALLENGE,
-  HOST_COOP,
-  JOIN_COOP
+  COOP
 }
 
 interface GameModeConfig {
@@ -323,6 +322,8 @@ export class GameMode implements GameModeConfig {
       return i18next.t("gameMode:dailyRun");
     case GameModes.CHALLENGE:
       return i18next.t("gameMode:challenge");
+    case GameModes.COOP:
+      return i18next.t("gameMode:coop");
     }
   }
 
@@ -352,10 +353,8 @@ export class GameMode implements GameModeConfig {
       return i18next.t("gameMode:dailyRun");
     case GameModes.CHALLENGE:
       return i18next.t("gameMode:challenge");
-    case GameModes.HOST_COOP:
-      return i18next.t("gameMode:hostCoop");
-    case GameModes.JOIN_COOP:
-      return i18next.t("gameMode:joinCoop");
+    case GameModes.COOP:
+      return i18next.t("gameMode:coop");
     }
   }
 }

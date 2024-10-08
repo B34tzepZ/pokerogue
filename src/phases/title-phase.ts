@@ -166,16 +166,16 @@ export class TitlePhase extends Phase {
         };
         const options: OptionSelectItem[] = [
           {
-            label: GameMode.getModeName(GameModes.HOST_COOP),
+            label: i18next.t("menu:create"),
             handler: () => {
-              setModeAndEnd(GameModes.HOST_COOP);
+              setModeAndEnd(GameModes.COOP);
               return true;
             }
           },
           {
-            label: GameMode.getModeName(GameModes.JOIN_COOP),
+            label: i18next.t("menu:join"),
             handler: () => {
-              setModeAndEnd(GameModes.JOIN_COOP);
+              setModeAndEnd(GameModes.COOP);
               return true;
             }
           },
